@@ -5,4 +5,5 @@
 #' @name ccbingo-package
 #' @docType package
 #' @import graphics
+#' @importFrom stats ave na.omit
 NULL

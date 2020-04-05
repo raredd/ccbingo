@@ -9,7 +9,7 @@
 #' Conference call bingo
 #' 
 #' @description
-#' Play conference call bingo locally or in a \code{\link{shiny}} app.
+#' Play conference call bingo locally or with \code{\link[shiny]{shiny}}.
 #' 
 #' \code{ccbingo} runs in a regular \code{R} session and prompts the user for
 #' each click using \code{\link{locator}}. \code{ccbingo:::ccbingo_shiny} has
@@ -27,12 +27,13 @@
 #' alternatively, a character string to be converted to a seed with
 #' \code{char_to_seed}
 #' @param wins ways to win the game, any combination of \code{"col"},
-#' \code{"row"}, \code{"diag"}, or \code{"corner"}
+#' \code{"row"}, \code{"corner"}, or \code{"diag"}; alternatively, a function
+#' to determine wins returning \code{''} for no win and a non-zero length
+#' string for wins
 #' @param ... additional arguments passed to \code{ccbingo:::bingo} such as
-#' \code{title}, \code{free}, \code{width}, \code{col.grid},
-#' \code{col.select}, or \code{col.free}
-#' @param clicks for the \code{\link{shiny}} app, a list of click locations
-#' (in \link[=grconvertX]{user coordinates})
+#' \code{title} (card title), \code{free} (free space text), \code{width}
+#' (text width per box), \code{col.grid} (grid colors), \code{col.select}
+#' (color of selected boxes), or \code{col.free} (color of free box)
 #' @param player player name
 #' 
 #' @examples
@@ -122,6 +123,10 @@ ccbingo <- function(card, seed = 1L, wins = c('col', 'row', 'corner', 'diag'),
   invisible(win)
 }
 
+#' @param clicks for the \code{\link[shiny]{shiny}} app, a list of click
+#' locations (in \link[=grconvertX]{user coordinates})
+#' 
+#' @noRd
 ccbingo_shiny <- function(card, seed, wins, clicks, ...) {
   seed <- if (is.character(seed))
     char_to_seed(seed) else as.integer(seed)
@@ -179,7 +184,7 @@ ccbingo_app <- function() {
 #' @param m a 5x5 logical matrix of selected boxes
 #' @param wins ways to win the game, any combination of \code{"col"},
 #' \code{"row"}, \code{"corner"}, or \code{"diag"}; alternatively, a function
-#' to determine wins returning \code('') for no win and a non-zero length
+#' to determine wins returning \code{''} for no win and a non-zero length
 #' string for wins
 #' 
 #' @examples

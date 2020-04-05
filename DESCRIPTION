@@ -6,18 +6,19 @@ Authors@R: person("Robert", "Redd", email = "raredd01@gmail.com",
   role = c("aut", "cre"))
 Author: Robert Redd
 Maintainer: Robert Redd <raredd01@gmail.com>
-Description: Conference call bingo
+Description: Play a game of conference call bingo.
 Imports:
     graphics
 Suggests:
+    knitr,
     shiny
 License: GPL-2
 LazyData: yes
 URL: https://github.com/raredd/ccbingo
-VignetteBuilder: knitr
-RoxygenNote: 7.1.0
-Encoding: UTF-8
 Collate:
   'ccbingo-package.R'
   'ccbingo.R'
   'cards.R'
+VignetteBuilder: knitr
+RoxygenNote: 7.1.0
+Encoding: UTF-8
