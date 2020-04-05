@@ -57,16 +57,15 @@
 #' 
 #' ## same as above except pass a list of recorded clicks
 #' 
-#' ## interactive -- first get up a game then make clicks
-#' # ccbingo(cards$zoom)
-#' # clicks <- locator(5)
-#' # ccbingo:::ccbingo_shiny(cards$zoom, clicks = clicks)
+#' ## interactive -- first set up a game then make clicks
+#' ccbingo(cards$zoom)
+#' clicks <- locator(5)
+#' ccbingo:::ccbingo_shiny(cards$zoom, 1, NULL, clicks)
 #' 
 #' ## or pass a list of clicks directly to game
 #' set.seed(1)
 #' clicks <- list(x = runif(15, 0, 5), y = -runif(15, 0, 5))
-#' ccbingo:::ccbingo_shiny(cards$zoom, clicks = clicks)
-#' 
+#' ccbingo:::ccbingo_shiny(cards$zoom, 1, NULL, clicks)
 #' 
 #' ## run shiny app
 #' ccbingo_app()
@@ -123,10 +122,45 @@ ccbingo <- function(card, seed = 1L, wins = c('col', 'row', 'corner', 'diag'),
   invisible(win)
 }
 
+#' @rdname ccbingo
+#' @export
+char_to_seed <- function(player) {
+  x <- gsub('[^A-z0-9 ]', '', player)
+  x <- strsplit(x, '')[[1L]]
+  sum(as.integer(factor(x, c(' ', letters, LETTERS, 0:9))))
+}
+
+#' @rdname ccbingo
+#' @export
+ccbingo_app <- function() {
+  path <- system.file('shiny', package = 'ccbingo')
+  shiny::runApp(path, launch.browser = TRUE)
+}
+
+#' ccbingo for shiny
+#' 
+#' Similar to \code{\link{ccbingo}} but uses a list of click coordinates since
+#' \code{\link[shiny]{shiny}} does not call \code{\link{locator}}.
+#' 
+#' @param card,seed,wins,... see \code{\link{ccbingo}}
 #' @param clicks for the \code{\link[shiny]{shiny}} app, a list of click
 #' locations (in \link[=grconvertX]{user coordinates})
 #' 
+#' @examples
+#' \dontrun{
+#' ## first set up a game then make clicks
+#' ccbingo(cards$zoom)
+#' clicks <- locator(5)
+#' ccbingo:::ccbingo_shiny(cards$zoom, 1, NULL, clicks)
+#' 
+#' ## or pass a list of clicks directly to game
+#' set.seed(1)
+#' clicks <- list(x = runif(15, 0, 5), y = -runif(15, 0, 5))
+#' ccbingo:::ccbingo_shiny(cards$zoom, 1, NULL, clicks)
+#' }
+#' 
 #' @noRd
+
 ccbingo_shiny <- function(card, seed, wins, clicks, ...) {
   seed <- if (is.character(seed))
     char_to_seed(seed) else as.integer(seed)
@@ -164,21 +198,6 @@ ccbingo_shiny <- function(card, seed, wins, clicks, ...) {
   win
 }
 
-#' @rdname ccbingo
-#' @export
-char_to_seed <- function(player) {
-  x <- gsub('[^A-z0-9 ]', '', player)
-  x <- strsplit(x, '')[[1L]]
-  sum(as.integer(factor(x, c(' ', letters, LETTERS, 0:9))))
-}
-
-#' @rdname ccbingo
-#' @export
-ccbingo_app <- function() {
-  path <- system.file('shiny', package = 'ccbingo')
-  shiny::runApp(path, launch.browser = TRUE)
-}
-
 #' Checking for wins
 #' 
 #' @param m a 5x5 logical matrix of selected boxes
@@ -205,6 +224,9 @@ ccbingo_app <- function() {
 check_for_win <- function(m, wins = c('col', 'row', 'corner', 'diag')) {
   if (is.function(wins))
     return(wins(m))
+  
+  if (is.null(wins))
+    wins <- c('col', 'row', 'corner', 'diag')
   
   rn <- which(rowSums(m) == 5L)
   cn <- which(colSums(m) == 5L)

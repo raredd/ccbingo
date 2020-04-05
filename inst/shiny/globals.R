@@ -1,5 +1,5 @@
 ### shiny app functions
-# cards, play_shiny, char_to_seed, check_for_win, bingo
+# cards, ccbingo_shiny, char_to_seed, check_for_win, bingo
 ###
 
 
@@ -95,11 +95,6 @@ char_to_seed <- function(player) {
   x <- gsub('[^A-z0-9 ]', '', player)
   x <- strsplit(x, '')[[1L]]
   sum(as.integer(factor(x, c(' ', letters, LETTERS, 0:9))))
-}
-
-ccbingo_app <- function() {
-  path <- system.file('shiny', package = 'ccbingo')
-  shiny::runApp(path, launch.browser = TRUE)
 }
 
 check_for_win <- function(m, wins = c('col', 'row', 'corner', 'diag')) {

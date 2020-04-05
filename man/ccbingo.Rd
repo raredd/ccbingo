@@ -73,16 +73,15 @@ ccbingo(cards$zoom, title = 'my bingo', free = '<3', col.free = 'white',
 
 ## same as above except pass a list of recorded clicks
 
-## interactive -- first get up a game then make clicks
-# ccbingo(cards$zoom)
-# clicks <- locator(5)
-# ccbingo:::ccbingo_shiny(cards$zoom, clicks = clicks)
+## interactive -- first set up a game then make clicks
+ccbingo(cards$zoom)
+clicks <- locator(5)
+ccbingo:::ccbingo_shiny(cards$zoom, 1, NULL, clicks)
 
 ## or pass a list of clicks directly to game
 set.seed(1)
 clicks <- list(x = runif(15, 0, 5), y = -runif(15, 0, 5))
-ccbingo:::ccbingo_shiny(cards$zoom, clicks = clicks)
-
+ccbingo:::ccbingo_shiny(cards$zoom, 1, NULL, clicks)
 
 ## run shiny app
 ccbingo_app()

@@ -39,7 +39,7 @@ ccbingo(cards$zoom)
 ```r
 ccbingo(
   rownames(mtcars), wins = function(x) if (sum(x) >= 6) '6 or more' else '',
-  title = 'Monday lab meeting',
+  title = 'Monday lab meeting', free = '<3',
   col.grid = rainbow(6), col.free = 'white', col.select = 'white'
 )
 ```
